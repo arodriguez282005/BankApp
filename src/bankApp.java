@@ -2,7 +2,7 @@
     Program Name: bankApp
     Program Date: 5/5/26
     Developer Names: Alejandro Rodriguez, Natalia Jackson
-    Program Version: 4.1
+    Program Version: 4.2
 
 */
 
@@ -38,6 +38,10 @@ public class bankApp{
 
         public double getacctBalance(){
             return acctBalance;
+        }
+
+        public String getbankName(){
+            return bankName;
         }
 
         public void printall(){
@@ -128,7 +132,7 @@ public void pay(double amount, String description)
             {
                 acctBalance -= (stockPrice * stockAmt);
                 System.out.println("You bought " + stockAmt + " of " + stockName);
-                System.out.printf("Remaining balance: $%.2f" , acctBalance);
+                System.out.printf("Remaining SCHWAB investment balance: $%.2f\n" , acctBalance);
             }
         }
         
@@ -181,7 +185,7 @@ public void pay(double amount, String description)
         {
 
             case 1:
-                System.out.println(bankName + " balances: ");
+                System.out.println(Checking.getbankName() + " balances: ");
                 Checking.printall();
                 Savings.printall();
                 Invest.printall();
