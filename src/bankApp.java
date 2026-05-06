@@ -2,7 +2,7 @@
     Program Name: bankApp
     Program Date: 5/5/26
     Developer Names: Alejandro Rodriguez, Natalia Jackson
-    Program Version: 1.0
+    Program Version: 3.0
 
 */
 
@@ -20,7 +20,7 @@ public class bankApp{
     public static class Account{
         //called placeholder because I dont know what to call it yet
         //gonna leave it intitialized in the class because I see no reason to change it in main
-        String bankName = "placeholder";
+        String bankName = "Java Bank";
         String acctName;
         double acctBalance;
 
@@ -46,17 +46,17 @@ public class bankApp{
 
         // deposite money
 
-public void deposit(double amount)
-{
-    if(amount >0)
+    public void deposit(double amount)
     {
-        acctBalance += amount;
+        if(amount >0)
+        {
+            acctBalance += amount;
+        }
+        else
+        {
+            System.out.println("Invaild deposit.");
+        }
     }
-    else
-    {
-        System.out.println("Invaild deposit.");
-    }
-}
 
 // withdraw money
 
@@ -84,7 +84,7 @@ public void transfer(Account target, double amount)
     } 
     else 
     {
-        System.out.println("The ransfer has failed please try again.");
+        System.out.println("The transfer has failed please try again.");
     }
 }
 
@@ -107,8 +107,30 @@ public void pay(double amount, String description)
     //derived class since the investment account is going to do different things
     public static class investAccount extends Account{
         String brokerName = "SCHWAB";
-        String stockName;
-        double stockPrice;
+        String stockName = "Best Buy";
+        double stockPrice = 58.56;
+        double stockAmt;
+        double temp2;
+
+        public void setStockAmt(double input)
+        {
+            stockAmt = input;
+        }
+
+        public void stockPurchase()
+        {
+            temp2 = Math.floor(acctBalance / (stockPrice * stockAmt));
+            if (temp2 < 1) 
+            {
+                System.out.println("Not enough money to buy " + stockAmt + " shares.");
+            }
+            else
+            {
+                acctBalance -= (stockPrice * stockAmt);
+                System.out.println("You bought " + stockAmt + " of " + stockName);
+                System.out.println("Remaining balance: " + acctBalance);
+            }
+        }
         
     }
 
@@ -119,6 +141,8 @@ public void pay(double amount, String description)
     {
         Scanner scnr = new Scanner(System.in);
         Account Checking = new Account();
+        Account Savings = new Account();
+        investAccount Invest = new investAccount();
         String tempName;
         double tempBal;
         // this might be what he wants but not sure if i did it right
@@ -126,21 +150,29 @@ public void pay(double amount, String description)
 
         Checking.setacctName("Checking");
         Checking.setacctBalance(1500);
-        Account Savings = new Account();
+        
         Savings.setacctName("Savings");
         Savings.setacctBalance(500);
+
+        Invest.setacctName("Investment");
+        Invest.setacctBalance(0);
+        
+
+        Savings.transfer(Invest, 250);
+
 
         boolean running = true;
 
         while (running)
         {
-            System.out.println("\n=== BANK MENU ===");
+            System.out.println("\n=== JAVA BANK MENU ===");
             System.out.println("1. View your Balances");
             System.out.println("2. Deposit");
             System.out.println("3. Withdraw");
             System.out.println("4. Transfer");
             System.out.println("5. Pay");
-            System.out.println("6. Exit");
+            System.out.println("6. Investment");
+            System.out.println("7. Exit");
             System.out.print("Choose your option: ");
 
         int choice = scnr.nextInt();
@@ -190,6 +222,15 @@ public void pay(double amount, String description)
                 break;
 
             case 6:
+                 scnr.nextLine(); 
+                 System.out.print("How many shares do you want to purchase: ");
+                 double temp3 = scnr.nextDouble();
+                 Invest.setStockAmt(temp3);
+                 Invest.stockPurchase();
+                 // System.out.println()
+                break;
+
+            case 7:
                 running = false;
                 System.out.println("Goodbye!");
                 break;
