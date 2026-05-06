@@ -2,7 +2,7 @@
     Program Name: bankApp
     Program Date: 5/5/26
     Developer Names: Alejandro Rodriguez, Natalia Jackson
-    Program Version: 4.0
+    Program Version: 4.1
 
 */
 
@@ -171,7 +171,7 @@ public void pay(double amount, String description)
             System.out.println("3. Withdraw");
             System.out.println("4. Transfer");
             System.out.println("5. Pay");
-            System.out.println("6. Investment");
+            System.out.println("6. SCHWAB Investment");
             System.out.println("7. Exit");
             System.out.print("Choose your option: ");
 
@@ -181,6 +181,7 @@ public void pay(double amount, String description)
         {
 
             case 1:
+                System.out.println(bankName + " balances: ");
                 Checking.printall();
                 Savings.printall();
                 Invest.printall();
