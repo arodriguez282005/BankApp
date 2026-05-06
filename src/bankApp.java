@@ -2,7 +2,7 @@
     Program Name: bankApp
     Program Date: 5/5/26
     Developer Names: Alejandro Rodriguez, Natalia Jackson
-    Program Version: 3.0
+    Program Version: 4.0
 
 */
 
@@ -128,7 +128,7 @@ public void pay(double amount, String description)
             {
                 acctBalance -= (stockPrice * stockAmt);
                 System.out.println("You bought " + stockAmt + " of " + stockName);
-                System.out.println("Remaining balance: " + acctBalance);
+                System.out.printf("Remaining balance: $%.2f" , acctBalance);
             }
         }
         
@@ -183,6 +183,7 @@ public void pay(double amount, String description)
             case 1:
                 Checking.printall();
                 Savings.printall();
+                Invest.printall();
                 break;
 
             case 2:
@@ -204,12 +205,22 @@ public void pay(double amount, String description)
                 break;
 
             case 4:
-                System.out.print("Transfer (1): Checking to Savings , (2): Savings to Checking: ");
+                System.out.print("Transfer (1): Checking to Savings , (2): Savings to Checking , (3): Savings to Investment, (4): Investment to Checking");
                 int t = scnr.nextInt();
                 System.out.print("Amount: ");
                 double tamt = scnr.nextDouble();
-                if (t == 1) Checking.transfer(Savings, tamt);  // tamt = transfer account
-                else Savings.transfer(Checking, tamt);
+                if (t == 1) {
+                    Checking.transfer(Savings, tamt);  // tamt = transfer account
+                }
+                else if (t == 2) {
+                    Savings.transfer(Checking, tamt);
+                }
+                else if (t == 3){
+                    Savings.transfer(Invest, tamt);
+                }
+                else{
+                    Invest.transfer(Checking, tamt);
+                }
                 break;
 
             case 5:
