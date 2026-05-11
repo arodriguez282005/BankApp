@@ -2,7 +2,7 @@
     Program Name: bankApp
     Program Date: 5/5/26
     Developer Names: Alejandro Rodriguez, Natalia Jackson
-    Program Version: 4.2
+    Program Version: 4.6
 
 */
 
@@ -13,13 +13,11 @@ import java.util.*;
 public class bankApp{
     
     //the class that Checking and Savings are going to be objects of
-    //Investment will use a derived class based on this
-    //currently missing a function to transfer/pay money this is done now not sure if it works though
-
-
-    public static class Account{
-        //called placeholder because I dont know what to call it yet
-        //gonna leave it intitialized in the class because I see no reason to change it in main
+    //Investment uses a derived class based on this
+    
+    public static class Account
+    {
+        //bank name is initialized here because there is no reason to change it in main
         String bankName = "Java Bank";
         String acctName;
         double acctBalance;
@@ -48,8 +46,9 @@ public class bankApp{
             System.out.println(acctName + " balance: $" + acctBalance);
         }
 
-        // deposite money
-
+    // deposits money into any of the objects that use Account as a basis
+    // includes an error message if the user tries to deposit 0 or a negative number
+    
     public void deposit(double amount)
     {
         if(amount >0)
@@ -62,54 +61,64 @@ public class bankApp{
         }
     }
 
-// withdraw money
+  // withdraws money from any of the accounts that use Account as a basis
+  // includes an error message if the withdrawl would put the account into the negatives
+  
+  public void withdraw(double amount)
+  {
+      if (amount > 0 && amount <= acctBalance)
+      {
+          acctBalance -= amount;
+      } 
+      else 
+      {
+          System.out.println("Invalid withdraw.");
+      }
+  }
 
-public void withdraw(double amount)
-{
-    if (amount > 0 && amount <= acctBalance)
-    {
-        acctBalance -= amount;
-    } 
-    else 
-    {
-        System.out.println("Invalid withdraw.");
-    }
-}
-
-// transfer money to another account
-
-public void transfer(Account target, double amount)
-{
-    if (amount > 0 && amount <= acctBalance)
-    {
+  // transfers money from one account to another
+  // includes an error message if the transfer would be invalid
+  
+  public void transfer(Account target, double amount, boolean running)
+  {
+      if (amount > 0 && amount <= acctBalance && running)
+      {
+          this.acctBalance -= amount;
+          target.acctBalance += amount;
+          System.out.println("The transfer was successful.");
+      } 
+      else if (amount > 0 && amount <= acctBalance && !running)
+      {
         this.acctBalance -= amount;
         target.acctBalance += amount;
-        System.out.println("the Transfer was successful.");
-    } 
-    else 
-    {
-        System.out.println("The transfer has failed please try again.");
-    }
-}
+      }
+      else 
+      {
+          System.out.println("The transfer has failed please try again.");
+      }
+  }
 
-// pay 
+  // pay 
 
-public void pay(double amount, String description)
-{
-    if (amount > 0 && amount <= acctBalance)
-    {
-        withdraw(amount); 
-        System.out.println("Paid $" + amount + " for " + description);
-    }
-    else 
-    {
-        System.out.println("Payment failed.");
-    }
-}
-    }
+  public void pay(double amount, String description)
+  {
+      if (amount > 0 && amount <= acctBalance)
+      {
+          withdraw(amount); 
+          System.out.println("Paid $" + amount + " for " + description);
+      }
+      else 
+      {
+          System.out.println("Payment failed.");
+      }
+  	}
+  }
 
     //derived class since the investment account is going to do different things
-    public static class investAccount extends Account{
+    
+   
+   public static class investAccount extends Account
+    {
         String brokerName = "SCHWAB";
         String stockName = "Best Buy";
         double stockPrice = 58.56;
@@ -131,26 +140,22 @@ public void pay(double amount, String description)
             else
             {
                 acctBalance -= (stockPrice * stockAmt);
-                System.out.println("You bought " + stockAmt + " of " + stockName);
+                System.out.println("You bought " + stockAmt + " of " + stockName + " at $" + stockPrice + " per share.");
                 System.out.printf("Remaining SCHWAB investment balance: $%.2f\n" , acctBalance);
             }
         }
         
     }
 
-    //main where the switch statesments should be
-    //currently missing switch statements because I have 0 clue what he wants
-    // not sre what he means by switch statements either 
+    
     public static void main(String[] args) throws Exception 
     {
         Scanner scnr = new Scanner(System.in);
         Account Checking = new Account();
         Account Savings = new Account();
         investAccount Invest = new investAccount();
-        String tempName;
-        double tempBal;
-        // this might be what he wants but not sure if i did it right
 
+	// initializing values
 
         Checking.setacctName("Checking");
         Checking.setacctBalance(1500);
@@ -160,12 +165,25 @@ public void pay(double amount, String description)
 
         Invest.setacctName("Investment");
         Invest.setacctBalance(0);
+
+        boolean running = false;
         
 
-        Savings.transfer(Invest, 250);
+        Savings.transfer(Invest, 250, running); // running
 
+// true or false statement
 
-        boolean running = true;
+        running = true;
+        
+        // login
+        
+System.out.print("Enter account name: ");
+String userName = scnr.nextLine();
+System.out.print("Password: ");
+String password = scnr.nextLine();
+System.out.println("Login successful");
+
+// while loop for main menu
 
         while (running)
         {
@@ -181,92 +199,90 @@ public void pay(double amount, String description)
 
         int choice = scnr.nextInt();
 
+    //main menu this is where the  switch statesments are and what they do
+
         switch (choice) 
         {
 
-            case 1:
+            case 1 -> {
+                System.out.println();
                 System.out.println(Checking.getbankName() + " balances: ");
                 Checking.printall();
                 Savings.printall();
                 Invest.printall();
-                break;
+                }
 
-            case 2:
+            case 2 -> {
+                System.out.println();
                 System.out.print("Deposit into (1) Checking (2) Savings: ");
                 int d = scnr.nextInt();
                 System.out.print("Amount: ");
                 double damt = scnr.nextDouble();
                 if (d == 1) Checking.deposit(damt); // damt = deopsit account
                 else Savings.deposit(damt);
-                break;
+                }
 
-            case 3:
+            case 3 -> {
+                System.out.println();
                 System.out.print("Withdraw from (1) Checking (2) Savings: ");
                 int w = scnr.nextInt();
                 System.out.print("Amount: ");
                 double wamt = scnr.nextDouble();
                 if (w == 1) Checking.withdraw(wamt); // wamt = withdrawaccount
                 else Savings.withdraw(wamt);
-                break;
+                }
 
-            case 4:
-                System.out.print("Transfer (1): Checking to Savings , (2): Savings to Checking , (3): Savings to Investment, (4): Investment to Checking");
+            case 4 -> {
+                System.out.println();
+                System.out.println("Transfer Options: ");
+                System.out.println("1: Checking to Savings ");
+                System.out.println("2: Savings to Checking ");
+                System.out.println("3: Savings to Investment ");
+                System.out.println("4: Investment to Checking ");
                 int t = scnr.nextInt();
                 System.out.print("Amount: ");
                 double tamt = scnr.nextDouble();
-                if (t == 1) {
-                    Checking.transfer(Savings, tamt);  // tamt = transfer account
+                switch (t) {
+                    case 1 -> Checking.transfer(Savings, tamt, running);  // tamt = transfer account
+                    case 2 -> Savings.transfer(Checking, tamt, running);
+                    case 3 -> Savings.transfer(Invest, tamt, running);
+                    default -> Invest.transfer(Checking, tamt, running);
                 }
-                else if (t == 2) {
-                    Savings.transfer(Checking, tamt);
                 }
-                else if (t == 3){
-                    Savings.transfer(Invest, tamt);
-                }
-                else{
-                    Invest.transfer(Checking, tamt);
-                }
-                break;
 
-            case 5:
+
+            case 5 -> {
+                System.out.println();
                 scnr.nextLine(); 
-                System.out.print("Description: ");
+                System.out.print("Description(What is the money for?): ");
                 String desc = scnr.nextLine();
                 System.out.print("Amount: ");
                 double pamt = scnr.nextDouble();
                 Checking.pay(pamt, desc);
-                break;
+                }
 
-            case 6:
-                 scnr.nextLine(); 
-                 System.out.print("How many shares do you want to purchase: ");
-                 double temp3 = scnr.nextDouble();
-                 Invest.setStockAmt(temp3);
-                 Invest.stockPurchase();
-                 // System.out.println()
-                break;
+            case 6 -> {
+                System.out.println();
+                scnr.nextLine(); 
+                System.out.print("SCHWAB option");
+                System.out.print("How many shares do you want to purchase?: ");
+                double temp3 = scnr.nextDouble();
+                Invest.setStockAmt(temp3);
+                Invest.stockPurchase();
+                    // System.out.println()
+                }
 
-            case 7:
+            case 7 -> {
+                System.out.println();
                 running = false;
                 System.out.println("Goodbye!");
-                break;
+                System.out.println("Logout successful");
+                }
 
-            default:
-                System.out.println("Invalid choice please try again.");
+
+            default -> System.out.println("Invalid choice please try again.");
         } 	
     }
-
-
-        // put this to test the Account class
-        /*System.out.println("PLease enter the account name:");
-        tempName = scnr.nextLine();
-        Checking.setacctName(tempName);
-        System.out.println("Enter the account balance:");
-        tempBal = scnr.nextDouble();
-        Checking.setacctBalance(tempBal);
-        Checking.printall();*/
-        
-
         
     }
 }
