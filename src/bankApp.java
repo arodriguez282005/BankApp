@@ -2,12 +2,13 @@
     Program Name: bankApp
     Program Date: 5/5/26
     Developer Names: Alejandro Rodriguez, Natalia Jackson
-    Program Version: 4.6
+    Program Version: 5.0
 
 */
 
 
-import java.util.*;
+import java.util.Scanner;
+
 @SuppressWarnings("resource")
 
 public class bankApp{
@@ -150,6 +151,27 @@ public class bankApp{
     
     public static void main(String[] args) throws Exception 
     {
+        //could not get file to open properly
+        /* File Passwords = new File("Passwords.txt");
+        //File Usernames = new File("Usernames.txt");
+        int idx = 0;
+        String[] passArray = new String[3];
+        //String[] nameArray = new String[3];
+
+        try(Scanner passScan = new Scanner(Passwords)){
+            while(passScan.hasNextLine()){
+                passArray[idx] = passScan.nextLine();
+                idx += 1;
+                System.out.println("Yes this is working");
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("PASSWORD FAILED.");
+            //System.out.println(Passwords.());
+            e.printStackTrace();
+        }
+            */
+
+
         Scanner scnr = new Scanner(System.in);
         Account Checking = new Account();
         Account Savings = new Account();
