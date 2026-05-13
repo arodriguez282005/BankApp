@@ -2,13 +2,11 @@
     Program Name: bankApp
     Program Date: 5/5/26
     Developer Names: Alejandro Rodriguez, Natalia Jackson
-    Program Version: 5.0
-
+    Program Version: 5.1
 */
 
 
 import java.util.Scanner;
-
 @SuppressWarnings("resource")
 
 public class bankApp{
@@ -45,6 +43,8 @@ public class bankApp{
 
         public void printall(){
             System.out.println(acctName + " balance: $" + acctBalance);
+        
+        
         }
 
     // deposits money into any of the objects that use Account as a basis
@@ -145,9 +145,16 @@ public class bankApp{
                 System.out.printf("Remaining SCHWAB investment balance: $%.2f\n" , acctBalance);
             }
         }
-        
+                // add intrest rate here I think 
+                //add 7.5 % to savings after each transaction
+                
+         public void addInterest()
+         {        
+                acctBalance = acctBalance * 1.075;
+                }
     }
 
+    // attempted to create a file however VS code could not find it
     
     public static void main(String[] args) throws Exception 
     {
@@ -245,19 +252,21 @@ System.out.println("Login successful");
                 }
 
             case 3 -> {
+                Invest.addInterest();
                 System.out.println();
                 System.out.print("Withdraw from (1) Checking (2) Savings: ");
                 int w = scnr.nextInt();
                 System.out.print("Amount: ");
                 double wamt = scnr.nextDouble();
-                if (w == 1) Checking.withdraw(wamt); // wamt = withdrawaccount
+                if (w == 1) Checking.withdraw(wamt); // wamt = withdraw amount
                 else Savings.withdraw(wamt);
                 }
 
             case 4 -> {
+                Invest.addInterest();
                 System.out.println();
                 System.out.println("Transfer Options: ");
-                System.out.println("1: Checking to Savings ");
+                System.out.println("1: Checking to Savings "); 
                 System.out.println("2: Savings to Checking ");
                 System.out.println("3: Savings to Investment ");
                 System.out.println("4: Investment to Checking ");
@@ -265,7 +274,7 @@ System.out.println("Login successful");
                 System.out.print("Amount: ");
                 double tamt = scnr.nextDouble();
                 switch (t) {
-                    case 1 -> Checking.transfer(Savings, tamt, running);  // tamt = transfer account
+                    case 1 -> Checking.transfer(Savings, tamt, running);  // tamt = transfer amount
                     case 2 -> Savings.transfer(Checking, tamt, running);
                     case 3 -> Savings.transfer(Invest, tamt, running);
                     default -> Invest.transfer(Checking, tamt, running);
@@ -287,10 +296,19 @@ System.out.println("Login successful");
                 System.out.println();
                 scnr.nextLine(); 
                 System.out.print("SCHWAB option");
+                System.out.println("(1) Purchase shares");
+                System.out.println("(2) View portfolio");
+                int t = scnr.nextInt();
+                if(t == 1){
                 System.out.print("How many shares do you want to purchase?: ");
                 double temp3 = scnr.nextDouble();
                 Invest.setStockAmt(temp3);
                 Invest.stockPurchase();
+                }
+                else
+                {
+                Invest.printall();
+                }
                     // System.out.println()
                 }
 
