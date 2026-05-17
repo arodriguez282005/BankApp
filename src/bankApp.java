@@ -2,11 +2,12 @@
     Program Name: bankApp
     Program Date: 5/5/26
     Developer Names: Alejandro Rodriguez, Natalia Jackson
-    Program Version: 5.3
+    Program Version: 6.0
 */
 
+import java.io.File;
+import java.util.*;
 
-import java.util.Scanner;
 @SuppressWarnings("resource")
 
 public class bankApp{
@@ -149,7 +150,7 @@ public class bankApp{
             {
                 acctBalance -= (stockPrice * stockAmt);
                 System.out.println("You bought " + stockAmt + " of " + stockName + " at $" + stockPrice + " per share.");
-                System.out.printf("Remaining SCHWAB investment balance: $%.2f\n" , acctBalance);
+                System.out.printf("Remaining " + brokerName + " investment balance: $%.2f\n" , acctBalance);
             }
         }
                 // add intrest rate here I think 
@@ -169,28 +170,7 @@ public class bankApp{
     
     public static void main(String[] args) throws Exception 
     {
-        //could not get file to open properly
-        /* File Passwords = new File("Passwords.txt");
-        //File Usernames = new File("Usernames.txt");
-        int idx = 0;
-        String[] passArray = new String[3];
-        //String[] nameArray = new String[3];
 
-        try(Scanner passScan = new Scanner(Passwords)){
-            while(passScan.hasNextLine()){
-                passArray[idx] = passScan.nextLine();
-                idx += 1;
-                System.out.println(GREEN +"Yes this is working" + RESET);
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println(RED + "PASSWORD FAILED." + RESET);
-            //System.out.println(Passwords.());
-            e.printStackTrace();
-        }
-            */
-
-
-        Scanner scnr = new Scanner(System.in);
         Account Checking = new Account();
         Account Savings = new Account();
         investAccount Invest = new investAccount();
@@ -209,22 +189,77 @@ public class bankApp{
         boolean running = false;
         
 
-        Savings.transfer(Invest, 250, running); // running
+        Savings.transfer(Invest, 250, running);
 
-// true or false statement
-
-        running = true;
+        
         
         // login
-        
-System.out.print("Enter account name: ");
-String userName = scnr.nextLine();
-System.out.print("Password: ");
-String password = scnr.nextLine();
-System.out.println(GREEN + "Login successful" + RESET);
+        ArrayList<String> usernames = new ArrayList<>();
+        ArrayList<String> passwords = new ArrayList<>();
+
+        try{
+            Scanner inputUser = new Scanner(new File ("Usernames.txt"));
+
+            while(inputUser.hasNext()){
+                usernames.add(inputUser.nextLine());
+            }
+            inputUser.close();
+
+        }catch(Exception e){
+            
+            e.printStackTrace();
+            System.out.println("Error reading file Usernames.txt");
+            return;
+
+        }
+
+         try{
+            Scanner inputPass = new Scanner(new File ("Passwords.txt"));
+
+            while(inputPass.hasNext()){
+                passwords.add(inputPass.nextLine());
+            }
+            inputPass.close();
+
+        }catch(Exception e){
+            
+            e.printStackTrace();
+            System.out.println("Error reading file Passwords.txt");
+            return;
+
+        }
+
+        int attempts = 3;
+        Scanner scnr = new Scanner(System.in);
+        while(attempts > 0){
+            System.out.print("Enter account name: ");
+            String userName = scnr.nextLine();
+            
+            int idx = usernames.indexOf(userName);
+            if (idx == -1) {
+                System.out.println(RED + "Username does not exist" + RESET);
+                continue;
+            }
+
+            System.out.print("Password: ");
+            String password = scnr.nextLine();
+            if (passwords.get(idx).equals(password)){
+                System.out.println(GREEN + "Login successful" + RESET);
+                running = true;
+                break;
+            }
+            else {
+                attempts -= 1;
+                System.out.println(RED + "Incorrect password, " + attempts + " remaining before lockout." + RESET);
+            }
+        }
+
+        if(!running){
+            System.out.println(RED + "Account is locked." + RESET);
+        }
 
 // while loop for main menu
-
+        //Scanner scnr = new Scanner(System.in);
         while (running)
         {
             System.out.println("\n=== JAVA BANK MENU ===");
@@ -306,7 +341,7 @@ System.out.println(GREEN + "Login successful" + RESET);
             case 6 -> {
                 System.out.println();
                 scnr.nextLine(); 
-                System.out.println("SCHWAB option:");
+                System.out.println(Invest.brokerName + " option:");
                 System.out.println("(1) Purchase shares");
                 System.out.println("(2) View portfolio");
                 int t = scnr.nextInt();
