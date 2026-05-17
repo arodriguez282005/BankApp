@@ -2,7 +2,7 @@
     Program Name: bankApp
     Program Date: 5/5/26
     Developer Names: Alejandro Rodriguez, Natalia Jackson
-    Program Version: 5.1
+    Program Version: 5.3
 */
 
 
@@ -10,6 +10,13 @@ import java.util.Scanner;
 @SuppressWarnings("resource")
 
 public class bankApp{
+    
+    // colors added if it works green, if it fails red
+    
+    public static final String RESET = "\u001B[0m"; // makes sure the color changes when needed
+    public static final String GREEN = "\u001B[32m"; // green
+    public static final String RED = "\u001B[31m"; // red
+    // public static final String                  // if we wanty other color
     
     //the class that Checking and Savings are going to be objects of
     //Investment uses a derived class based on this
@@ -58,7 +65,7 @@ public class bankApp{
         }
         else
         {
-            System.out.println("Invaild deposit.");
+            System.out.println(RED + "Invaild deposit." + RESET);
         }
     }
 
@@ -73,7 +80,7 @@ public class bankApp{
       } 
       else 
       {
-          System.out.println("Invalid withdraw.");
+          System.out.println(RED +"Invalid withdraw." + RESET);
       }
   }
 
@@ -86,7 +93,7 @@ public class bankApp{
       {
           this.acctBalance -= amount;
           target.acctBalance += amount;
-          System.out.println("The transfer was successful.");
+          System.out.println(GREEN + "The transfer was successful." + RESET);
       } 
       else if (amount > 0 && amount <= acctBalance && !running)
       {
@@ -95,7 +102,7 @@ public class bankApp{
       }
       else 
       {
-          System.out.println("The transfer has failed please try again.");
+          System.out.println(RED + "The transfer has failed please try again." + RESET);
       }
   }
 
@@ -110,7 +117,7 @@ public class bankApp{
       }
       else 
       {
-          System.out.println("Payment failed.");
+          System.out.println(RED + "Payment failed." + RESET);
       }
   	}
   }
@@ -136,7 +143,7 @@ public class bankApp{
             temp2 = Math.floor(acctBalance / (stockPrice * stockAmt));
             if (temp2 < 1) 
             {
-                System.out.println("Not enough money to buy " + stockAmt + " shares.");
+                System.out.println(RED+ "Not enough money to buy " + stockAmt + " shares." + RESET);
             }
             else
             {
@@ -152,6 +159,10 @@ public class bankApp{
          {        
                 acctBalance = acctBalance * 1.075;
                 }
+
+        public void printStock(){
+            System.out.println("Shares of " + stockName + ": " + stockAmt);
+        }
     }
 
     // attempted to create a file however VS code could not find it
@@ -169,10 +180,10 @@ public class bankApp{
             while(passScan.hasNextLine()){
                 passArray[idx] = passScan.nextLine();
                 idx += 1;
-                System.out.println("Yes this is working");
+                System.out.println(GREEN +"Yes this is working" + RESET);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("PASSWORD FAILED.");
+            System.out.println(RED + "PASSWORD FAILED." + RESET);
             //System.out.println(Passwords.());
             e.printStackTrace();
         }
@@ -210,7 +221,7 @@ System.out.print("Enter account name: ");
 String userName = scnr.nextLine();
 System.out.print("Password: ");
 String password = scnr.nextLine();
-System.out.println("Login successful");
+System.out.println(GREEN + "Login successful" + RESET);
 
 // while loop for main menu
 
@@ -295,19 +306,20 @@ System.out.println("Login successful");
             case 6 -> {
                 System.out.println();
                 scnr.nextLine(); 
-                System.out.print("SCHWAB option");
+                System.out.println("SCHWAB option:");
                 System.out.println("(1) Purchase shares");
                 System.out.println("(2) View portfolio");
                 int t = scnr.nextInt();
                 if(t == 1){
-                System.out.print("How many shares do you want to purchase?: ");
-                double temp3 = scnr.nextDouble();
-                Invest.setStockAmt(temp3);
-                Invest.stockPurchase();
+                    System.out.print("How many shares do you want to purchase?: ");
+                    double temp3 = scnr.nextDouble();
+                    Invest.setStockAmt(temp3);
+                    Invest.stockPurchase();
                 }
                 else
                 {
-                Invest.printall();
+                    Invest.printall();
+                    Invest.printStock();
                 }
                     // System.out.println()
                 }
@@ -315,14 +327,14 @@ System.out.println("Login successful");
             case 7 -> {
                 System.out.println();
                 running = false;
-                System.out.println("Goodbye!");
-                System.out.println("Logout successful");
+                System.out.println(GREEN + "Goodbye!"+ RESET);
+                System.out.println(GREEN + "Logout successful" + RESET);
                 }
 
 
-            default -> System.out.println("Invalid choice please try again.");
+            default -> System.out.println(RED + "Invalid choice please try again." + RESET);
         } 	
     }
-        
+
     }
 }
